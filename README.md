@@ -10,7 +10,7 @@ This repository will contain the official codebase for our ICCV 2025 paper:
 ---
 
 🚧 **Code coming soon!**  
-We are currently preparing the code for public release. Please stay tuned and star the repository to get notified. If you have any questions for this work, feel free to reach out.
+We are currently preparing the code for public release. Reach out if you have any questions about this work.
 
 ---
 
