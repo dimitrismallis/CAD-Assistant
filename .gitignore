@@ -1,0 +1,53 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# CAD Assistant specific
+logs/*
+cad_evaluation_results.json
+
+# Temporary files (but keep sgp_bench_samples/ for release)
+*.png
+*.jpg
+*.jpeg
+*.gif
+test*.FCStd
+final*.FCStd
+rectangle*.fcstd
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Config files with sensitive data
+config.json

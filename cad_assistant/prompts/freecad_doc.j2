@@ -1,0 +1,566 @@
+{% if include_sketch_class %}
+class Sketch:
+    """Represents a 2D sketch object in FreeCAD, used for creating and defining geometric shapes, 
+    constraints, and profiles that can later be referenced in 3D operations (e.g., extrusion, revolution).
+
+    The Sketch class provides methods to add, modify, and constrain geometric elements such as 
+    lines, arcs, circles, and points. Sketches serve as essential building blocks in parametric 
+    modeling, allowing users to control the relationships between elements through constraints.
+
+    Attributes:
+    -----------
+    Name (str):
+        The name of the sketch object.
+    Geometry (List[Union[LineSegment, ArcOfCircle, Circle, Point]]):
+        A list of geometric elements in the sketch (e.g., lines, arcs, circles, points).
+    Constraints (List[Sketcher.Constraint]):
+        A list of constraints applied to the sketch elements (e.g., coincidence, equality, tangency).
+    ConstraintCount (int):
+        The total number of constraints applied to the sketch.
+    GeometryCount (int):
+        The total number of geometric elements present in the sketch.
+    Placement (Placement):
+        Defines the position and orientation of the sketch in 3D space. This attribute allows 
+        the sketch to be moved or rotated within the document, affecting how it will be aligned 
+        with other objects in FreeCAD.
+    State (List[str]):
+        A list representing the current status of the sketch. Possible values include:
+        - 'Touched': The sketch has been modified since the last update.
+        - 'Untouched': The sketch has not been modified since its last valid state.
+        - 'Invalid': The sketch contains errors or unsatisfied constraints.
+
+    Usage Example:
+    --------------
+    >>> import FreeCAD
+    >>> from FreeCAD import Part, Sketcher
+    >>> doc = FreeCAD.newDocument("ExampleDoc")
+    >>> sketch = doc.addObject('Sketcher::SketchObject', 'sketch')
+    
+    Methods:
+    --------
+    addGeometry(self, geometry: Union[LineSegment, ArcOfCircle, Circle, Point]) -> int:
+        This method is used to adds a geometric element to the sketch. 
+        
+        Parameters:
+        ----------
+        geometry: 
+            a geometric element to be added on the sketch (e.g., lines, arcs, circles, points).
+
+        Returns:
+        --------
+        index (int):
+            The index of the added geometry on the sketch.Geometry list.
+
+        Usage Example:
+        --------------
+        >>> line = Part.LineSegment( App.Vector(0.2, 0.3, 0),  App.Vector(0.3, 0.2, 0))
+        >>> line_index = sketch.addGeometry(line)  # A line is added.
+        >>> sketch.recompute()
+        >>> line = sketch.Geometry[line_index]
+
+
+    delGeometries(self, identifiers: List[int]) -> None:
+        Deletes one or more geometries from the sketch, based on their indices on the sketch.Geometry list.
+
+        Parameters:
+        ----------
+        identifiers (List[int]):
+            A list of zero-based identifiers specifying which geometries to delete from the sketch.
+        
+        Usage Example:
+        --------------
+        >>> sketch.delGeometries([1])  # This will delete the geometry at index 1
+        >>> sketch.recompute()
+
+
+    addConstraint(self, constraint: Sketcher.Constraint) -> int:
+        Adds a constraint to the sketch. 
+        Returns the index of the added constraint.
+
+        Parameters:
+        ----------
+        constraint (Sketcher.Constraint): 
+            a geometric constraint to be added on the sketch.
+        
+        Returns:
+        --------
+        index (int):
+            The index of the added constraint on the sketch.Constraints list.
+                
+        Usage Example:
+        --------------
+        >>> parallel_constraint = Sketcher.Constraint('Parallel', 4, 6)  
+        >>> sketch.addConstraint(parallel_constraint)
+        >>> sketch.recompute()
+        
+    recompute(self) -> None:
+        Forces a recompute of the sketch to apply and update any pending changes. 
+        This ensures that all modifications (such as added or deleted geometries and constraints) 
+        are reflected in the document.
+        
+        Parameters:
+        ----------
+        None
+        
+        Returns:
+        --------
+        None
+    """
+
+
+{% endif %}
+{% if include_line_segment_class %}
+class LineSegment:
+    """Represents a line defined by two endpoints in 3D space.
+    This class is part of the FreeCAD Part module and should be instantiated using `Part.LineSegment`.
+
+    Constructor:
+    ------------
+    __init__(self, start_vector: App.Vector, end_vector: App.Vector)
+        Initializes a LineSegment with specified start and end points in 3D space.
+
+        Parameters:
+        ----------
+        start_vector (App.Vector): 
+            A 3D vector representing the coordinates of the line's start point.
+        end_vector (App.Vector): 
+            A 3D vector representing the coordinates of the line's end point. 
+                    
+    Attributes:
+    -----------
+    StartPoint (App.Vector):
+        The start point of the line segment.
+    EndPoint (App.Vector):
+        The end point of the line segment.
+
+    Usage Example:
+    --------------
+    >>> # Create a LineSegment from start and end points. 
+    >>> start_point = App.Vector(0, 0, 0)
+    >>> end_point = App.Vector(1, 1, 1)
+    >>> line = Part.LineSegment(start_point, end_point)
+    >>> line.StartPoint.x 
+    0 # access the x coordinate of the start point
+    """
+
+
+
+{% endif %}
+{% if include_circle_class %}
+class Circle:
+    """Represents a circle in 3D space defined by a center point, a normal vector and a radius using FreeCAD's Vector objects.
+    This class is part of the FreeCAD Part module and should be instantiated using `Part.Circle`.
+
+    Constructor:
+    ------------
+    __init__(self, center_vector: App.Vector, normal_vector: App.Vector, radius: float):
+        Initializes a Circle with a specified center, normal vector, and radius.
+
+        Parameters:
+        ----------
+        center_vector (App.Vector):
+            A 3D vector with the coordinates of the center point of the circle.
+        normal_vector (App.Vector): 
+            A 3D vector representing the direction normal to the circle's plane.
+        radius (float): 
+            The radius of the circle.
+            
+    Attributes:
+    -----------
+    Center : (App.Vector)
+        The center point of the circle.
+    Radius : (float)
+        The radius of the circle.
+
+    Usage Example:
+    --------------
+    >>> center = App.Vector(6.0, 3.0, 0)
+    >>> normal = App.Vector(0, 0, 1)
+    >>> radius = 1.1
+    >>> circle = Part.Circle(center, normal, radius)
+    >>> circle.Center
+    Vector (6.0, 3.0, 0.0)
+    """
+
+
+
+{% endif %}
+{% if include_point_class %}
+class Point:
+    """Represents a point in 3D space.
+    This class is part of the FreeCAD Part module and should be instantiated using `Part.Point`.
+
+    Constructor:
+    ------------
+    __init__(self, point_vector: App.Vector):
+        Constructor of the Point class
+
+        Parameters:
+        ----------
+        point_vector (App.Vector):
+            A 3D vector with the coordinates of the point.
+
+    Attributes:
+    -----------
+    X (float):
+        The x-coordinate of the point.
+    Y (float):
+        The y-coordinate of the point.
+    Z (float):
+        The z-coordinate of the point.
+        
+    Usage Example:
+    --------------
+    >>> point = Part.Point(App.Vector(1.0, 2.0, 3.0))
+    >>> point.X
+    1.0
+    """
+
+
+{% endif %}
+{% if include_arc_of_circle_class %}
+class ArcOfCircle:
+    """Represents a circular arc derived from a given circle, defined by start and end angles in radians.
+    The arc is drawn counterclockwise from the start angle to the end angle. Angles are expressed in radians
+    where 0 radians correspond to the positive x-axis and increase counterclockwise.
+
+    This class is part of the FreeCAD Part module and should be instantiated using `Part.ArcOfCircle`.
+
+    Constructor:
+    ------------
+    __init__(self, circle: Circle, start_param: float, end_param: float)
+        Initializes an ArcOfCircle instance from a circle and specified start and end parameters.
+
+        Parameters:
+        ----------
+        circle (Circle): 
+            The Circle object from which the arc is derived.
+        start_param (float): 
+            The starting parameter (angle in radians) on the circle's circumference that defines the beginning of the arc.
+        end_param (float): 
+            The ending parameter (angle in radians) on the circle's circumference that defines the end of the arc.
+            
+    Attributes:
+    -----------
+        Radius : (float)
+            The radius of the circle from which the arc is derived.
+        StartPoint : (App.Vector)
+            The start point of the arc.
+        EndPoint : (App.Vector)
+            The end point of the arc.
+        Center : (App.Vector)
+            The center point of the circle from which the arc is derived.
+        FirstParameter : (float)
+            The start angle of the arc in radians.
+        LastParameter : (float)
+            The end angle of the arc in radians.
+
+    Usage Example:
+    --------------
+    >>> #Create counterclockwise ArcOfCircle with center, radius, and start and end angles in radians. 
+    >>> arc_center = App.Vector(0.0670, -0.0000, 0.0)  # Center of the arc
+    >>> arc_radius = 0.0130  # Radius of the arc
+    >>> start_param = -1.6008  # Start parameter in radians
+    >>> end_param = -0.0000  # End parameter in radians
+    >>> arc_direction = App.Vector(0, 0, 1)
+    >>> # Create the arc using Part.ArcOfCircle
+    >>> arc = Part.ArcOfCircle(Part.Circle(arc_center, arc_direction, arc_radius), start_param, end_param)
+    >>> #Create a counterclockwise ArcOfCircle, with center, radius, and start and end angles in degrees.
+    >>> arc_center = App.Vector(0.0, 0.0, 0)
+    >>> arc_radius = 1.0
+    >>> arc_startAngle = FreeCAD.Units.parseQuantity("0 deg").getValueAs(FreeCAD.Units.Radian)
+    >>> arc_endAngle = FreeCAD.Units.parseQuantity("90 deg").getValueAs(FreeCAD.Units.Radian)
+    >>> arc = Part.ArcOfCircle(Part.Circle(arc_center, App.Vector(0, 0, 1), arc_radius), arc_startAngle, arc_endAngle)  # Arc from 0 to 90 degrees counterclockwise
+    ArcOfCircle (Radius : 1, Position : (0, 0, 0), Direction : (0, 0, 1), Parameter : (0, 1.5708))
+    """
+
+
+{% endif %}
+{% if include_arc_class %}
+class Arc:
+    """Represents an arc defined by a start point, an end point, and an intermediate point on the arc.
+
+    This class is part of the FreeCAD `Part` module and should be instantiated using `Part.Arc`.
+    The arc is uniquely determined by three points: the start, the end, and a point somewhere 
+    on the arc (referred to as the midpoint, though it need not be the geometric middle). The 
+    arc lies on the circle that passes through these three points.
+
+    After calling `recompute()` on a FreeCAD sketch, an `Arc` object is automatically 
+    transformed into an `ArcOfCircle` object. This is because FreeCAD optimizes the 
+    geometry representation for arcs, converting them to arcs of circles after 
+    the geometry is fully processed.
+
+    Constructor:
+    ------------
+    __init__(self, start_vector: App.Vector, end_vector: App.Vector, mid_vector: App.Vector)
+        Initializes a Arc with specified start, end and mid points in 3D space.
+
+        Parameters:
+        ----------
+        start_vector (App.Vector): 
+            A 3D vector representing the coordinates of the arc's start point.
+        end_vector (App.Vector): 
+            A 3D vector representing the coordinates of the arc's end point. 
+        mid_vector (App.Vector): 
+            A 3D vector representing a point on the curcomference of the arc.    
+
+    Usage:
+    ------
+    Use this function to create ArcOfCircle objects from start, end and mid points.
+    
+    Usage Example:
+    --------------
+    >>> start_point = App.Vector(5.0, 0, 0)
+    >>> end_point = App.Vector(0, 5.0, 0)
+    >>> mid_point = App.Vector(3.54, 3.54, 0)
+    >>> arc = Part.Arc(start_point, mid_point, end_point)
+    <Arc object>
+    >>> sketch.addGeometry(arc)
+    >>> sketch.recompute()
+    >>> arc
+    <ArcOfCircle object>
+    """
+
+
+{% endif %}
+{% if include_point_of_geometry_enum %}
+class PointOfGeometry(Enum):
+    START = 1
+    END = 2
+    CENTER = 3
+
+
+{% endif %}
+{% if include_constraint_class %}
+class Constraint:
+    """Represents a geometric constraint in a FreeCAD sketch.
+    Constraints define relationships between geometric elements (lines, arcs, circles, points), ensuring specific properties or behaviors.
+    Constraints can be created using the `Sketch.addConstraint()` method.
+
+    Constructor:
+    ------------
+    __init__(self, constraint_type: str, *args)
+        Initializes a Sketcher.Constraint instance with a specified type and parameters.
+
+        Parameters:
+        -----------
+        constraint_type (str): 
+            The type of constraint to apply. Supported types include:
+            - 'Coincident'
+            - 'Parallel'
+            - 'Equal'
+            - 'Vertical'
+            - 'Horizontal'
+            - 'Perpendicular'
+            - 'Tangent'
+
+        *args (varies): 
+            Additional parameters specific to the constraint type. These define the geometries or points 
+            to which the constraint applies and any additional constraint-specific requirements.
+
+        Usage:
+        ------
+        Supported Constraint Types and Their Arguments:
+        1. Coincident: Enforces that two points or vertices coincide (i.e., share the same location in space).
+            - args: ('Coincident', First, FirstPos, Second, SecondPos)
+                - First (int):
+                    The index of the first geometry.
+                - FirstPos (int):
+                    The vertex (1 for start, 2 for end, 3 for center) of `Geometry_index1` to fulfill the constraint.
+                - Second (int):
+                    The index of the second geometry.
+                - SecondPos (int):
+                    The vertex (1 for start, 2 for end, 3 for center) of `Geometry_index2` to fulfill the constraint.
+
+        2. Parallel: Ensures two lines remain parallel.
+            - args: ('Parallel', First, Second)
+                - First (int):
+                    The index of the first Line segment to be made parallel.
+                - Second (int):
+                    The index of the second Line segment to be made parallel.
+
+        3. Equal: Makes two lines or circles equal in length or radius.
+            - args: ('Equal', First, Second)
+                - First (int):
+                    The index of the first line segment or circle.
+                - Second (int):
+                    The index of the first line segment or circle.
+                
+        4. Vertical: Forces a line segment to be vertical.
+            - args: ('Vertical', First)
+                - First (int): The index of the Line segment.
+
+        5. Horizontal: Forces a line segment to be horizontal.
+            - args: ('Horizontal', First)
+                - First : (int)
+                    The index of the line segment.
+
+        6. Perpendicular: Ensures that two line segments are perpendicular.
+            - `args`: ('Perpendicular', Geometry_index1, Geometry_index2)
+                - Geometry_index1 : (int)
+                    The index of the first line segment.
+                - Geometry_index2 : (int)
+                    The index of the second line segment.
+                
+        7. Tangent: Makes a line tangent to a curve.
+            - args: ('Tangent', Geometry_index1, Geometry_index2)
+                - Geometry_index1 : (int)
+                    The index of the first geometry.
+                - Geometry_index2 : (int)
+                    The index of the first geometry.
+
+        Usage Example:
+        --------------
+        >>> coincident_constraint = Sketcher.Constraint('Coincident', *(1, PointOfGeometry.START.value, 2, PointOfGeometry.END.value))
+        >>> sketch.addConstraint(coincident_constraint)
+        >>> sketch.recompute()
+        >>> sketch.State
+        ['Touched']
+        # Check the total number of constraints applied to the sketch.
+        >>> print(f"Number of constraints: {len(sketch.Constraints)}")
+        Number of constraints: 2
+        # Remove the most recently added constraint.
+        >>> sketch.delConstraint(len(sketch.Constraints) - 1)
+        # Remove the constraint on specific index.
+        >>> sketch.delConstraint(coincident_constraint_index)
+        >>> sketch.addConstraint(Sketcher.Constraint('Horizontal', 0))
+        >>> sketch.recompute()
+        >>> sketch.State # Use the State Variable to ensure that all added constraints are valid.
+        ['Touched', 'Invalid'] 
+    """
+
+{% endif %}
+{% if include_del_constraint_function %}
+delConstraint(index: int) -> None:
+    """Deletes a constraint base on its index on the sketch.Constraints list.
+    
+    Parameters:
+    ----------
+    index (int):
+        The index of the constraint that will be deleted on the sketch.Constraints list.
+            
+    Usage Example:
+    --------------
+    >>> sketch.delConstraint(3)
+    >>> sketch.recompute()
+    """
+
+{% endif %}
+{% if include_extrusion_class %}
+class Extrusion:
+    """Represents an extrusion of a sketch in FreeCAD.
+    This class is part of the FreeCAD Part module and should be instantiated using a sketch object and the desired extrusion parameters.
+
+    Attributes:
+    -----------
+    Base (Sketch):
+        The sketch object that is extruded into a 3D solid.
+    DirMode (str):
+        Direction mode of the extrusion (default: "Normal").
+    LengthFwd (float): 
+        Forward extrusion length.
+    LengthRev (float): 
+        Reverse extrusion length.
+    Solid (bool): 
+        Whether the extrusion is a solid (default: True).   
+    Reversed (bool): 
+        Whether the extrusion direction is reversed.
+    Symmetric (bool): 
+        Whether the extrusion is symmetric along the sketch plane.
+    TaperAngle (float): 
+        Taper angle for the extrusion.
+    TaperAngleRev (float):
+        Reverse taper angle for the extrusion.
+
+    Usage Example:
+    --------------
+    >>> extrude =  doc.addObject('Part::Extrusion', 'Extrude')
+    >>> extrude.Base = sketch # extrude an existing sketch object
+    >>> extrude.DirMode = "Normal"
+    >>> extrude.DirLink = None
+    >>> extrude.LengthFwd = 10.00
+    >>> extrude.LengthRev = 0.0
+    >>> extrude.Solid = True
+    >>> extrude.Reversed = False
+    >>> extrude.Symmetric = False
+    >>> extrude.TaperAngle = 0.0
+    >>> extrude.TaperAngleRev = 0.0
+    >>> doc.recompute()
+    """
+
+
+{% endif %}
+{% if include_solid_class %}
+class Solid:
+    """Represents a 3D solid in FreeCAD, created as part of an `Extrusion` operation. 
+    This shape object holds the geometry of the extruded solid and provides access to various 
+    geometric properties, as well as methods for performing transformations and boolean operations 
+    with other shapes.
+
+    Attributes:
+    -----------
+    TypeId (str):
+        The type of shape, typically "Part::TopoShape".
+    Volume (float):
+        The volume of the extruded solid.
+    Area (float):
+        The total surface area of the extruded solid.
+    BoundBox (BoundBox):
+        The bounding box of the shape, describing the spatial limits of the extrusion.
+
+    Methods:
+    --------
+    fuse(shape: Shape) -> Shape:
+        Performs a union operation, merging this shape with another solid to create a combined shape.
+
+        Parameters:
+        ----------
+        shape (Shape):
+            The other solid shape with which to perform the union operation.
+
+        Returns:
+        --------
+        Shape:
+            A new solid object representing the union of this shape and the specified shape.
+        
+        Usage Example:
+        --------------
+        >>> shape1 = extrude1.Shape  # Access the extruded shape
+        >>> shape2 = extrude2.Shape  # Access the extruded shape
+        >>> result_shape = shape2.fuse(shape1)  # Union with another shape
+
+    cut(shape: Shape) -> Shape:
+        Performs a cut operation, subtracting the specified shape from this shape.
+
+        Parameters:
+        ----------
+        shape (Shape):
+            The solid shape to subtract from this shape.
+
+        Returns:
+        --------
+        Shape:
+            A new solid object representing the result of subtracting the specified shape from this shape.
+        
+        Usage Example:
+        --------------
+        >>> result_shape = shape1.cut(shape2)  # Subtract shape2 from shape1
+
+    common(shape: Shape) -> Shape:
+        Performs an intersection operation, keeping only the volume that is common between this shape and another.
+
+        Parameters:
+        ----------
+        shape (Shape):
+            The solid shape to intersect with this shape.
+
+        Returns:
+        --------
+        Shape:
+            A new solid object representing the intersected volume of the two shapes.
+        
+        Usage Example:
+        --------------
+        >>> result_shape = shape1.common(shape2)  # Intersect shape1 with shape2
+    """
+{% endif %}

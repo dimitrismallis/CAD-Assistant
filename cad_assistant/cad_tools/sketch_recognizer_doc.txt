@@ -1,0 +1,49 @@
+def sketch_recognizer(sketch: Sketch) -> None:
+    """Analyzes a 2D CAD sketch, providing both a JSON serialization of the Attributes for the geometry 
+    and constraints and an image rendering of the sketch. Use this function to understand the current FreeCAD sketch.
+
+    This function processes the given sketch and returns a JSON representation describing its geometric 
+    elements (e.g., lines, arcs, points, circles) and constraints from the `sketch.Geometry` 
+    and `sketch.Constraints` lists. Attributes for Geometries and constraints are extracted directly from these lists, 
+    serialized into a structured JSON format for easy interpretation. 
+    
+    Additionally, this function generates an image rendering of the sketch for visual examination. The sketch
+    is rendered as a black and white image. Primitives of the CAD sketch are labeled with a unique numerical ID,
+    shown by a marker that is positioned over the primitive.
+    
+    Parameters:
+    ----------
+    sketch (Sketch): 
+        The input sketch object to be analyzed, containing the geometries and constraints.
+            
+    Prints:
+    -------
+    Displays the sketch's parameters and constraints for quick review. It also returns a
+    sketch_image (PIL.Image.Image or np.ndarray) rendering of the sketch.
+
+    Usage Example:
+    --------------
+    >>> sketch_recognizer(sketch)
+    The sketch contains the following geometries and constraints, serialized in JSON format:
+    {
+        "Geometry": [
+            {
+                "Index": 1,
+                "Type": "Line segment",
+                "StartPoint": {
+                    "x": ...,
+                    "y": ...
+                },
+                "EndPoint": {
+                    "x": ...,
+                    "y": ...
+                },
+                "isConstruction": ...
+        ],
+        "Constraints": [
+            { ... }
+        ]
+    }
+    Rendered image of the sketch:
+    [Image displays here]
+    """

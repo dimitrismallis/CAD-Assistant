@@ -1,0 +1,25 @@
+{
+  "openai_api_key": "your-openai-api-key-here",
+  "openai_model": "gpt-4o-2024-08-06",
+  "max_steps": 10,
+  "debug_mode": false,
+  "freecad_documentation": {
+    "include_sketch_class": true,
+    "include_line_segment_class": true,
+    "include_circle_class": true,
+    "include_point_class": true,
+    "include_arc_of_circle_class": true,
+    "include_arc_class": true,
+    "include_point_of_geometry_enum": false,
+    "include_constraint_class": false,
+    "include_del_constraint_function": false,
+    "include_extrusion_class": false,
+    "include_solid_class": false,
+    "include_tool_list": true,
+    "include_initialization_code": true,
+    "include_requirements": true
+  },
+  "tools": [
+    "sketch_recognizer"
+  ]
+}

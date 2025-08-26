@@ -1,0 +1,123 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "SGP 2D Evaluation - Quick (5 samples)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/run_cad_evaluation.py",
+            "args": [
+                "--limit",
+                "5"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "envFile": "${workspaceFolder}/.env",
+            "justMyCode": false
+        },
+        {
+            "name": "SGP 2D Evaluation - Small (10 samples)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/run_cad_evaluation.py",
+            "args": [
+                "--limit",
+                "10",
+                "--debug"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "envFile": "${workspaceFolder}/.env",
+            "justMyCode": false
+        },
+        {
+            "name": "SGP 2D Evaluation - Medium (50 samples)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/run_cad_evaluation.py",
+            "args": [
+                "--limit",
+                "50",
+                "--debug"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "envFile": "${workspaceFolder}/.env",
+            "justMyCode": false
+        },
+        {
+            "name": "SGP 2D Evaluation - Parallel (10 samples)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/run_cad_evaluation.py",
+            "args": [
+                "--limit",
+                "10",
+                "--parallel",
+                "--workers",
+                "4",
+                "--debug"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "envFile": "${workspaceFolder}/.env",
+            "justMyCode": false
+        },
+        {
+            "name": "SGP 2D Evaluation - Custom",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/run_cad_evaluation.py",
+            "args": [
+                "--limit",
+                "10",
+                "--debug"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "envFile": "${workspaceFolder}/.env",
+            "justMyCode": false
+        },
+        {
+            "name": "Process 2D Samples",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/process_2d_samples.py",
+            "args": [],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "envFile": "${workspaceFolder}/.env",
+            "justMyCode": false
+        },
+        {
+            "name": "Test SGP Setup",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test_sgp_setup.py",
+            "args": [],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "envFile": "${workspaceFolder}/.env",
+            "justMyCode": false
+        },
+        {
+            "name": "Test 2D Evaluation",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test_2d_evaluation.py",
+            "args": [],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "envFile": "${workspaceFolder}/.env",
+            "justMyCode": false
+        }
+    ]
+} 

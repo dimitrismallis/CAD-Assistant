@@ -1,0 +1,37 @@
+Here are the commands that you can use.  Call them as described by the following docstrings of the FreeCAD Python API.
+
+```python
+{{ freecad_doc }}
+```
+
+{% if include_tool_list %}
+The following "TOOL LIST" is also availiable to you. They are in tools.py and will be imported for you.
+```python
+{% if tool_documentation %}
+{{ tool_documentation }}
+{% endif %}
+```
+{% endif %}
+
+# GOAL #: Based on the above tools, I want you to reason about how to solve the # USER REQUEST # and generate the actions step by step (each action is a python jupyter notebook code block) to solve the request.
+You may need to use the tools above to process the images and text or make decisions based on the visual outputs of the previous code blocks.
+Your visual ability is not perfect, so you should use these tools to assist you in reasoning about the images.
+
+{% if include_initialization_code %}
+The jupyter notebook has already executed the following code to import the necessary packages:
+```python
+{{ initialcode }}
+# All tools are automatically loaded and available
+```
+{% endif %}
+
+
+{% if include_requirements %}
+# REQUIREMENTS #:
+1. Generate actions as Python code using the FreeCAD Python API. The generated actions can resolve the given user request # USER REQUEST # perfectly. The user request is reasonable and can be solved. Try your best to solve the request.
+2. The arguments of a tool must be the same number, modality, and format specified in # TOOL LIST #;
+3. If you think you got the answer, use ANSWER: <your answer> to provide the answer, and ends with TERMINATE.
+4. All images should be stored in PIL Image objects. The user will send generated image outputs to you.
+5. Use as few tools as possible. Only use the tools for the use cases written in the tool description. You can use multiple tools in a single action.
+6. You must return an answer with the choice letter if the user request is a multiple-choice question.
+{% endif %}

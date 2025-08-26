@@ -1,0 +1,47 @@
+{
+    "feature": {
+        "type": 151,
+        "typeName": "BTMSketch",
+        "message": {
+            "entities": [],
+            "constraints": [],
+            "featureType": "newSketch",
+            "name": "My Sketch",
+            "parameters": [
+                {
+                    "type": 148,
+                    "typeName": "BTMParameterQueryList",
+                    "message": {
+                        "queries": [
+                            {
+                                "type": 138,
+                                "typeName": "BTMIndividualQuery",
+                                "message": {
+                                    "geometryIds": [
+                                        "JEC"
+                                    ],
+                                    "hasUserCode": false
+                                }
+                            }
+                        ],
+                        "parameterId": "sketchPlane",
+                        "hasUserCode": false
+                    }
+                }
+            ],
+            "suppressed": false,
+            "namespace": "",
+            "subFeatures": [],
+            "returnAfterSubfeatures": false,
+            "suppressionState": {
+                "type": 0
+            },
+            "hasUserCode": false
+        }
+    },
+    "serializationVersion": "1.2.8",
+    "sourceMicroversion": "5dc7fce8a93ee91aee0ddef8",
+    "rejectMicroversionSkew": false,
+    "microversionSkew": false,
+    "libraryVersion": 2581
+}

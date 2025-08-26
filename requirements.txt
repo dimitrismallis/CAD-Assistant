@@ -1,0 +1,21 @@
+# Core dependencies
+langchain>=0.3.26
+langchain-experimental>=0.3.0
+openai>=1.0.0
+pydantic>=2.7.4
+typing-extensions>=4.7
+jinja2>=3.1.0
+
+# Notebook support for evaluation results
+nbformat>=5.0.0
+
+
+# Data processing
+torchvision
+lz4
+kornia
+pandas
+datasets
+scipy
+# Visualization
+matplotlib>=3.5.0,<3.8.0
