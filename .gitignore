@@ -30,6 +30,10 @@ cad_evaluation_results.json
 *.jpg
 *.jpeg
 *.gif
+!images/*.png
+!images/*.jpg
+!images/*.jpeg
+!images/*.gif
 test*.FCStd
 final*.FCStd
 rectangle*.fcstd
