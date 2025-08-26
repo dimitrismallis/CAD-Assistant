@@ -13,14 +13,14 @@ This repository will contain the official codebase for our ICCV 2025 paper.
 ## 🚀 Overview
 
 
-CAD-Assistant is a tool-augmented VLLM framework for AI-assisted CAD. Our framework generated [FreeCAD](https://freecad-python-stubs.readthedocs.io/en/latest/autoapi/FreeCAD/index.html) code that is executed within CAD software directly and can process multimodal inputs, including textual queries, sketches, drawn commands and 3D scans.
+CAD-Assistant is a tool-augmented VLLM framework for AI-assisted CAD. Our framework generates [FreeCAD](https://freecad-python-stubs.readthedocs.io/en/latest/autoapi/FreeCAD/index.html) code that is executed within CAD software directly. CAD-Assistant can process multimodal inputs, including textual queries, sketches, drawn commands and 3D scans.
 
 <p align="center">
   <img src="images/teaser.png" alt="CAD-Assistant Teaser" width="800"/>
 </p>
 
 
-Current release includes the CAD-Assistant framework augmented with FreeCAD and a 2D CAD sketch renderering tool. Evaluation is performed on the 2D partition of the SGP-Bench. More CAD-tool implementations and evaluation settings will be released soon.
+Current release includes the CAD-Assistant framework implementation intergrated with FreeCAD and augmented with a 2D CAD sketch renderering tool.Evaluation is performed on the 2D partition of the SGP-Bench. The code also allows for easy intergration of novel tools. More CAD-tool implementations and evaluation settings will be released.
 
 
 ## 🛠️ Installation
