@@ -1,4 +1,4 @@
-<img src="images/paperlogo.png" alt="CAD-Assistant Logo" height="40" style="vertical-align:middle; margin-right:10px; margin-top:-8px;"><span style="font-size:1.5em;"><b>CAD-Assistant: Tool-Augmented VLLMs as Generic CAD Task Solvers</b></span> 
+<img src="images/paperlogo.png" alt="CAD-Assistant Logo" height="30" style="vertical-align:middle; margin-right:10px; margin-top:-8px;"><span style="font-size:1.5em;"> <b>CAD-Assistant: Tool-Augmented VLLMs as Generic CAD Task Solvers</b></span> 
 --
 
 ### [Dimitrios Mallis](https://dimitrismallis.github.io/), [Ahmet Serdar Karadeniz](https://askaradeniz.github.io/), [Sebastian Cavada](https://sebo-the-tramp.github.io/), [Danila Rukhovich](https://www.uni.lu/snt-en/people/danila-rukhovich/), [Niki Foteinopoulou](https://nickyfot.github.io/), [Kseniya Cherenkova](https://www.linkedin.com/in/kseniya-cherenkova-a3a65a54/), [Anis Kacem](https://www.uni.lu/en/person/NTAwMzU1NDVfX0FuaXMgS0FDRU0=/), [Djamila Aouada](https://www.uni.lu/snt-en/people/djamila-aouada/)
