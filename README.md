@@ -6,7 +6,8 @@
 This repository will contain the official codebase for our ICCV 2025 paper.
 
 📄 [CAD-Assistant Paper](https://arxiv.org/abs/2412.13810) |
-🌐 [CAD-Assistant Project Page](https://cadassistant.github.io/)
+🌐 [CAD-Assistant Project Page](https://cadassistant.github.io/) |
+📼 [CAD-Assistant Video](https://www.youtube.com/watch?v=GdiaQQVE9bI)
 
 
 
