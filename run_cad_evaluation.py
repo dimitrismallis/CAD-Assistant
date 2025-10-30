@@ -3,8 +3,8 @@
 CAD Evaluation Runner
 ====================
 
-Simple script to run 2D CAD evaluations on SGP-bench CAD split.
-Evaluates 2D samples using pre-generated FreeCAD sketch files.
+Script to run CAD evaluations on SGP-bench CAD split.
+Supports both 2D and 3D samples using pre-generated FreeCAD files.
 """
 
 import argparse
@@ -14,13 +14,13 @@ from sgp_cad_evaluator import SGPCADEvaluator
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Run 2D CAD evaluation on SGP-bench CAD split")
+    parser = argparse.ArgumentParser(description="Run CAD evaluation on SGP-bench CAD split (supports 2D and 3D)")
     
     # Basic options
     parser.add_argument('--limit', type=int, default=5, 
                        help='Number of samples to evaluate (default: 5 for quick test)')
-    parser.add_argument('--subject', type=str, default='2D', choices=['2D'],
-                       help='Subject type to evaluate (2D only for now)')
+    parser.add_argument('--subject', type=str, default='2D', choices=['2D', '3D', 'both'],
+                       help='Subject type to evaluate: 2D, 3D, or both (default: 2D)')
     parser.add_argument('--parallel', action='store_true',
                        help='Use parallel processing')
     parser.add_argument('--workers', type=int, default=None,
@@ -56,10 +56,11 @@ def main():
     # Show subject selection and validate
     print(f"🎯 Subject: {args.subject}")
     
-    # Validate subject (should always be 2D now)
-    if args.subject != '2D':
+    # Validate subject choices
+    valid_subjects = ['2D', '3D']
+    if args.subject not in valid_subjects:
         print(f"❌ Invalid subject: {args.subject}")
-        print("💡 Only 2D evaluation is supported in this version")
+        print(f"💡 Valid subjects: {', '.join(valid_subjects)}")
         return 1
     
     # Check config file
@@ -82,7 +83,7 @@ def main():
     
     try:
         # Initialize evaluator
-        print(f"🔧 Initializing {args.subject} CAD evaluator...")
+        print(f"🔧 Initializing CAD evaluator...")
         evaluator = SGPCADEvaluator(config_path=args.config, debug=args.debug)
         
         # Determine sample indices
@@ -91,43 +92,63 @@ def main():
             sample_indices = [int(x.strip()) for x in args.indices.split(',')]
             print(f"📋 Evaluating specific indices: {sample_indices}")
         
-        print(f"📁 Using {args.subject} sample directories from: {args.sketches_dir}")
+        print(f"📁 Using sample directories from: {args.sketches_dir}")
         
-        # Run evaluation
-        print(f"🎯 Starting {args.subject} evaluation...")
+        # Handle different subject types
+        all_results = []
+        subjects_to_evaluate = []
         
-        results = evaluator.evaluate_samples(
-            sample_indices=sample_indices,
-            limit=args.limit,
-            parallel=args.parallel,
-            max_workers=args.workers,
-            sketches_dir=args.sketches_dir,
-            trials=args.trials,
-            subject=args.subject
-        )
+
+        subjects_to_evaluate = [args.subject]
         
-        # Print summary
-        evaluator.print_summary(results)
+        for subject in subjects_to_evaluate:
+            print(f"\n🎯 Starting {subject} evaluation...")
+            
+            results = evaluator.evaluate_samples(
+                sample_indices=sample_indices,
+                limit=args.limit,
+                parallel=args.parallel,
+                max_workers=args.workers,
+                sketches_dir=args.sketches_dir,
+                trials=args.trials,
+                subject=subject
+            )
+            
+            # Print summary for this subject
+            print(f"\n📊 {subject} Results Summary:")
+            evaluator.print_summary(results)
+            
+            all_results.extend(results)
         
-        # Save results
-        evaluator.save_results(results, args.output)
+        # Save combined results
+        # Determine subject to save: use 'both' if multiple subjects, otherwise use the single subject
+        subject_to_save = 'both' if len(subjects_to_evaluate) > 1 else subjects_to_evaluate[0]
+        evaluator.save_results(all_results, args.output, subject=subject_to_save)
         
         print(f"\n✅ Evaluation completed!")
         print(f"📊 Results saved to: {args.output}")
         
+        # Show combined summary
+        if len(subjects_to_evaluate) > 1:
+            print(f"\n📊 Combined Results Summary:")
+            evaluator.print_summary(all_results)
+        
         # Show some example results
         print(f"\n📋 Example Results:")
-        for i, result in enumerate(results[:3]):
+        for i, result in enumerate(all_results[:5]):  # Show up to 5 examples
             status = "✅" if result.is_correct else "❌"
             pred = result.predicted_answer or "None"
+            
+            # Get subject from result (we'll need to add this to the result)
+            subject_info = ""
             
             if result.trials > 1:
                 # Show voting information
                 confidence_str = f" (confidence: {result.confidence:.1%})" if result.confidence else ""
                 votes_str = f" {result.vote_counts}" if result.vote_counts else ""
-                print(f"  {status} Sample {i+1}: Predicted {pred}, Correct {result.correct_answer}{votes_str}{confidence_str}")
+                print(f"  {status} Sample {result.pid}: Predicted {pred}, Correct {result.correct_answer}{votes_str}{confidence_str}")
             else:
-                print(f"  {status} Sample {i+1}: Predicted {pred}, Correct {result.correct_answer}")
+                print(f"  {status} Sample {result.pid}: Predicted {pred}, Correct {result.correct_answer}")
             
     except Exception as e:
         print(f"💥 Evaluation failed: {e}")

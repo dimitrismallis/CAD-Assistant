@@ -131,6 +131,21 @@ class CADAssistantLogger:
         self.logger.info(f"Prompt Name: {prompt_name}")
         self.logger.info(f"Project File: {project_file or 'None'}")
     
+
+
+    def log_status_message(self, message: str) -> None:
+        """
+        Log a simple markdown message to the notebook.
+        
+        Args:
+            message: Markdown-formatted message to add to the notebook
+        """
+        if message.strip():
+            markdown_cell = nbf.v4.new_markdown_cell(message)
+            self.notebook_cells.append(markdown_cell)
+            self.logger.info(f"📝 Added markdown message to notebook")
+
+
     def log_executed_code(self, code: str, output: str = "", step_info: Dict[str, Any] = None) -> None:
         """
         Log executed code for notebook generation.
@@ -215,7 +230,7 @@ class CADAssistantLogger:
         image_formats = ['png', 'jpg', 'jpeg', 'svg']
         
         for fmt in image_formats:
-            image_path = os.path.join(self.log_dir, f"sketch_step_{step_number}.{fmt}")
+            image_path = os.path.join(self.log_dir, f"step_image_{step_number}.{fmt}")
             if os.path.exists(image_path):
                 return image_path
         

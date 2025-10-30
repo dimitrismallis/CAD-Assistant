@@ -3,10 +3,11 @@ import json
 import copy
 import numpy as np
 from sketchgraphs.data import plotting
+from typing import Dict, List, Any, Optional, Tuple
 # SketchGraphs imports
 from sketchgraphs.data import Circle, Arc, Line, Point, Sketch
 from sketchgraphs.data import data_utils
-
+import os
 # Direct import of only what we need (avoiding heavy sketch_utils module)
 from sketchgraphs.data.prerender_images import render_sketch
 
@@ -438,7 +439,7 @@ class SketchRecognizer:
         # Optional logging to files
         if logdir and step is not None:
             # Save image
-            img_filename = os.path.join(logdir, f"sketch_step_{step}.png")
+            img_filename = os.path.join(logdir, f"step_image_{step}.png")
             sketch_img.save(img_filename)
             
         return sketch_img

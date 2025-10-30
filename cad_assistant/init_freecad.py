@@ -57,6 +57,8 @@ def initialize_freecad_environment(project_file: str = None) -> Tuple[Any, Any]:
         # Load existing project
         doc = App.openDocument(project_file)
         print(f"doc = App.openDocument('project.FCStd')")
+
+        # for 2D CQA there is only one Object that is the sketch object. Assigning this to a separate variable.
         if len(doc.Objects) == 1:
             if doc.Objects[0].Name == 'sketch':
                 sketch = doc.Objects[0]

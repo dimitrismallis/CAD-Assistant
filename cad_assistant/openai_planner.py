@@ -40,7 +40,7 @@ class OpenAIPlannerChain:
             Dictionary with image metadata and base64 data, or None if no image found
         """
         
-        image_path = os.path.join(self.logdir, f"sketch_step_{previous_step}.png")
+        image_path = os.path.join(self.logdir, f"step_image_{previous_step}.png")
         
         if not os.path.exists(image_path):
             return None

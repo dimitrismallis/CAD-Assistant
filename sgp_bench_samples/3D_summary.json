@@ -1,0 +1,29 @@
+[
+  {
+    "pid": 0,
+    "subject": "3D",
+    "answer": "A",
+    "directory": "3D_0000",
+    "fcstd_file": "3D_0000.FCStd",
+    "metadata_file": "3D_0000_metadata.json",
+    "question_preview": "Examine the following CAD code carefully to understand the 3D object it generates and answer the que..."
+  },
+  {
+    "pid": 1,
+    "subject": "3D",
+    "answer": "C",
+    "directory": "3D_0001",
+    "fcstd_file": "3D_0001.FCStd",
+    "metadata_file": "3D_0001_metadata.json",
+    "question_preview": "Examine the following CAD code carefully to understand the 3D object it generates and answer the que..."
+  },
+  {
+    "pid": 2,
+    "subject": "3D",
+    "answer": "B",
+    "directory": "3D_0002",
+    "fcstd_file": "3D_0002.FCStd",
+    "metadata_file": "3D_0002_metadata.json",
+    "question_preview": "Examine the following CAD code carefully to understand the 3D object it generates and answer the que..."
+  }
+]

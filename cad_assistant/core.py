@@ -42,10 +42,8 @@ class CADAssistantCore:
                 env_init_response = self.python_repl.run(code_to_execute)
                 
                 # Log initialization code for notebook
-                self.logger.log_executed_code(
-                    code=code_to_execute,
-                    output=env_init_response,
-                    step_info={"user_input": "System Initialization - FreeCAD Imports and Utilities"}
+                self.logger.log_status_message(
+                    "System Initialization - FreeCAD Imports and Utilities"
                 )
             
 
@@ -75,7 +73,8 @@ class CADAssistantCore:
                 output=global_vars_response,
                 step_info={"user_input": "System Initialization - Global Variables Setup"}
             )
-            
+
+
             # Step 3: Initialize the FreeCAD environment in another cell
             init_code = (
             "doc, sketch = initialize_freecad_environment(project_file)"
@@ -138,12 +137,10 @@ class CADAssistantCore:
                 response = self.python_repl.run(tool_code)
                 tools_loaded.append(tool_name)
                 
-                # Log the tool loading
-                self.logger.log_executed_code(
-                    code=tool_code,
-                    output=response,
-                    step_info={"user_input": f"Tool Loading - {tool_name}"}
+                self.logger.log_status_message(
+                    f"Tool Loading - {tool_name}"
                 )
+
                 
             except Exception as e:
                 raise Exception(f"Failed to load tool {tool_name}: {e}")

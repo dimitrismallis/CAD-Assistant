@@ -1,0 +1,10 @@
+name: occenv
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pythonocc-core
+  - pip:
+      - pyqt5
+      - Pillow

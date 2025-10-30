@@ -90,13 +90,21 @@ def evaluate_single_sample_isolated(sample_config_sketches_tuple):
             f"{key}: {value}" for key, value in sample.options.items()
         ])
         
-        # Only handle 2D subjects now
-        formatted_question = ("Answer the following multiple choice question. The last line of your response "
-                            "should be of the following format: 'Answer: $LETTER' (without quotes) where LETTER is one of ABCD.\n\n"
-                            "You are given a FreeCAD project file that includes a 2D CAD sketch. The FreeCAD project is "
-                            "already loaded for you. Examine the sketch carefully to understand the 2D object it generates "
-                            "and answer the question based on your interpretation of the rendered image of that object.\n\n" +
-                            question_only + '\n' + options_text)
+        # Format question based on subject type
+        if sample.subject == "2D":
+            formatted_question = ("Answer the following multiple choice question. The last line of your response "
+                                "should be of the following format: 'Answer: $LETTER' (without quotes) where LETTER is one of ABCD.\n\n"
+                                "You are given a FreeCAD project file that includes a 2D CAD sketch. The FreeCAD project is "
+                                "already loaded for you. Examine the sketch carefully to understand the 2D object it generates "
+                                "and answer the question based on your interpretation of the rendered image of that object.\n\n" +
+                                question_only + '\n' + options_text)
+        elif sample.subject == "3D":
+            formatted_question = ("Answer the following multiple choice question. The last line of your response "
+                                "should be of the following format: 'Answer: $LETTER' (without quotes) where LETTER is one of ABCD.\n\n"
+                                "You are given a FreeCAD project file that includes a 3D CAD model. The FreeCAD project is "
+                                "already loaded for you. Examine the 3D model carefully to understand the 3D object it represents "
+                                "and answer the question based on your interpretation of the rendered image of that object.\n\n" +
+                                question_only + '\n' + options_text)
         
         # Run the assistant
         result = assistant.step(formatted_question, max_iterations=max_steps)
@@ -201,12 +209,12 @@ class SGPCADEvaluator:
         except Exception as e:
             raise RuntimeError(f"Failed to create CAD Assistant: {e}")
     
-    def _format_2d_question(self, sample: SGPSample) -> str:
+    def _format_question(self, sample: SGPSample) -> str:
         """
-        Format the SGP 2D question for the assistant.
+        Format the SGP question for the assistant (supports both 2D and 3D).
         
         Args:
-            sample: SGP sample with 2D question
+            sample: SGP sample with CAD question
             
         Returns:
             Formatted question string
@@ -221,12 +229,28 @@ class SGPCADEvaluator:
             f"{key}: {value}" for key, value in sample.options.items()
         ])
         
-        formatted_question = ("Answer the following multiple choice question. The last line of your response "
-                            "should be of the following format: 'Answer: $LETTER' (without quotes) where LETTER is one of ABCD.\n\n"
-                            "You are given a FreeCAD project file that includes a 2D CAD sketch. The FreeCAD project is "
-                            "already loaded for you. Examine the sketch carefully to understand the 2D object it generates "
-                            "and answer the question based on your interpretation of the rendered image of that object.\n\n" +
-                            question_only + '\n' + options_text)
+        # Format question based on subject type
+        if sample.subject == "2D":
+            formatted_question = ("Answer the following multiple choice question. The last line of your response "
+                                "should be of the following format: 'Answer: $LETTER' (without quotes) where LETTER is one of ABCD.\n\n"
+                                "You are given a FreeCAD project file that includes a 2D CAD sketch. The FreeCAD project is "
+                                "already loaded for you. Examine the sketch carefully to understand the 2D object it generates "
+                                "and answer the question based on your interpretation of the rendered image of that object.\n\n" +
+                                question_only + '\n' + options_text)
+        elif sample.subject == "3D":
+            formatted_question = ("Answer the following multiple choice question. The last line of your response "
+                                "should be of the following format: 'Answer: $LETTER' (without quotes) where LETTER is one of ABCD.\n\n"
+                                "You are given a FreeCAD project file that includes a 3D CAD model. The FreeCAD project is "
+                                "already loaded for you. Examine the 3D model carefully to understand the 3D object it represents "
+                                "and answer the question based on your interpretation of the rendered image of that object.\n\n" +
+                                question_only + '\n' + options_text)
+        else:
+            # Fallback for unknown subjects
+            formatted_question = ("Answer the following multiple choice question. The last line of your response "
+                                "should be of the following format: 'Answer: $LETTER' (without quotes) where LETTER is one of ABCD.\n\n"
+                                "You are given a FreeCAD project file. The FreeCAD project is "
+                                "already loaded for you. Examine the model carefully and answer the question based on your interpretation.\n\n" +
+                                question_only + '\n' + options_text)
         
         return formatted_question
     
@@ -380,7 +404,7 @@ class SGPCADEvaluator:
             assistant = self._create_cad_assistant(project_file=sketch_file)
             
             # Format question for 2D samples only
-            formatted_question = self._format_2d_question(sample)
+            formatted_question = self._format_question(sample)
             
             # Run the assistant
             result = assistant.step(formatted_question, max_iterations=self.max_steps)
@@ -444,14 +468,17 @@ class SGPCADEvaluator:
             max_workers: Number of parallel workers
             sketches_dir: Directory containing pre-generated FreeCAD files
             trials: Number of trials per sample for majority voting
-            subject: Subject type to evaluate (2D only)
+            subject: Subject type to evaluate (2D, 3D, or both)
             
         Returns:
             List of evaluation results
         """
-        # Get all samples and filter by subject (only 2D supported)
+        # Get all samples and filter by subject
         all_samples = self.loader.get_samples("cad", limit=None)
-        filtered_samples = [s for s in all_samples if s.subject == "2D"]
+        if subject == "both":
+            filtered_samples = all_samples  # Include all subjects
+        else:
+            filtered_samples = [s for s in all_samples if s.subject == subject]
         
         if sample_indices:
             # If specific indices provided, get those samples
@@ -460,7 +487,14 @@ class SGPCADEvaluator:
             # Otherwise use limit
             samples = filtered_samples[:limit] if limit else filtered_samples
         
-        print(f"🔍 Evaluating {len(samples)} 2D CAD samples...")
+        if subject == "both":
+            subject_counts = {}
+            for s in samples:
+                subject_counts[s.subject] = subject_counts.get(s.subject, 0) + 1
+            subject_info = ", ".join([f"{count} {subj}" for subj, count in subject_counts.items()])
+            print(f"🔍 Evaluating {len(samples)} CAD samples ({subject_info})...")
+        else:
+            print(f"🔍 Evaluating {len(samples)} {subject} CAD samples...")
         if trials > 1:
             print(f"🗳️  Using majority voting with {trials} trials per sample")
             print(f"📊 Total evaluations: {len(samples) * trials}")
@@ -656,13 +690,14 @@ class SGPCADEvaluator:
             'voting_stats': voting_stats
         }
     
-    def save_results(self, results: List[EvaluationResult], filename: str):
+    def save_results(self, results: List[EvaluationResult], filename: str, subject: str = "unknown"):
         """
         Save evaluation results to JSON file.
         
         Args:
             results: List of evaluation results
             filename: Output filename
+            subject: Subject type of the evaluation (2D, 3D, both, or mixed)
         """
         # Convert results to dict format
         results_data = []
@@ -689,12 +724,16 @@ class SGPCADEvaluator:
             
             results_data.append(result_dict)
         
+        # Use the provided subject instead of inferring from PIDs
+        # (PIDs are reused across 2D and 3D partitions)
+        subjects_in_results = subject
+        
         # Add metadata
         output_data = {
             'evaluation_timestamp': datetime.now().isoformat(),
             'dataset': 'sgp-bench',
             'split': 'cad',
-            'subject': '2D',
+            'subject': subjects_in_results,
             'metrics': self.calculate_metrics(results),
             'results': results_data
         }
@@ -763,7 +802,7 @@ def main():
         evaluator.print_summary(results)
         
         # Save results
-        evaluator.save_results(results, "sgp_cad_evaluation_demo.json")
+        evaluator.save_results(results, "sgp_cad_evaluation_demo.json", subject="2D")
         
         print(f"\n🎉 Demo completed!")
         print(f"💡 To run full evaluation:")
