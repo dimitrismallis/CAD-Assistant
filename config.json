@@ -1,5 +1,5 @@
 {
-  "openai_api_key": "your-openai-api-key-here",
+  "openai_api_key": "your-key-here",
   "openai_model": "gpt-4o-2024-08-06",
   "max_steps": 10,
   "debug_mode": false,
@@ -20,6 +20,7 @@
     "include_requirements": true
   },
   "tools": [
-    "sketch_recognizer"
+    "sketch_recognizer",
+    "solid_recognizer"
   ]
 }

@@ -9,7 +9,9 @@ This repository will contain the official codebase for our ICCV 2025 paper.
 🌐 [CAD-Assistant Project Page](https://cadassistant.github.io/) |
 📼 [CAD-Assistant Video](https://www.youtube.com/watch?v=GdiaQQVE9bI)
 
+**News**:
 
+• 🚨 The 3D CAD question answering and the `solid_recognizer` tool is now released.
 
 ## 🚀 Overview
 
@@ -21,8 +23,7 @@ CAD-Assistant is a tool-augmented VLLM framework for AI-assisted CAD. Our framew
 </p>
 
 
-Current release includes the CAD-Assistant framework implementation intergrated with FreeCAD and augmented with a 2D CAD sketch renderering tool.Evaluation is performed on the 2D partition of the SGP-Bench. The code also allows for easy intergration of novel tools. More CAD-tool implementations and evaluation settings will be released.
-
+This release includes the CAD-Assistant framework implementation intergrated with FreeCAD and augmented with a 2D CAD sketch renderering tool and a 3D solid recognizer tool. Evaluation is performed on both the 2D and 3D partition of the SGP-Bench. The code also allows for easy intergration of novel tools.
 
 ## 🛠️ Installation
 
@@ -35,7 +36,7 @@ Edit `config.json` and add your OpenAI API key:
 
 ### Docker Installation
 
-The easiest way to get started is using Docker, which includes all dependencies including FreeCAD:
+The easiest way to get started is using Docker, which includes all dependencies including FreeCAD and Python OCC:
 
 1. **Clone the repository**
    ```bash
@@ -50,33 +51,51 @@ The easiest way to get started is using Docker, which includes all dependencies 
    ```
 
 
-## 🎯 Evaluation for 2D CAD Question Answering
+## 🎯 Evaluation for CAD Question Answering
 
-This repository includes evaluation on the 2D partition of the [SGP-bench](https://sgp-bench.github.io/) dataset. We provide preprocessed SGP-bench test samples in the `sgp_bench_samples/` directory, were CAD sketches are preloaded to FreeCAD `.FCStd` files. The directory includes the 700 FreeCAD `.FCStd` test sketch files organized directories (`2D_0001/`, `2D_0002/`, etc.)
+This repository includes evaluation on both the 2D and 3D partition of the [SGP-bench](https://sgp-bench.github.io/) dataset. We provide preprocessed SGP-bench test samples in the `sgp_bench_samples/` directory, were CAD sketches or CAD models are preloaded to FreeCAD `.FCStd` files. The directory includes the 1700 FreeCAD `.FCStd` test sketch files (700 for the 2D partitiona and 1000 for the 3D partition) organized directories (`2D_0001/`, `2D_0002/`, `3D_0001/`, etc.)
 
 
-#### Quick Test (5 samples, sequential)
+#### Quick Test (5 samples, sequential, 3D partition)
 ```bash
-python run_cad_evaluation.py --limit 5 --debug
+python run_cad_evaluation.py --subject 3D --limit 5 --debug
 ```
 
-#### Full Evaluation (all samples, parallel)
+#### Full Evaluation (all samples, parallel, 2D partition)
 ```bash
-python run_cad_evaluation.py --parallel --workers 4
+python run_cad_evaluation.py --parallel --subject 2D --workers 4
 ```
 
 After running evaluation, a JSON results file will appear in the root directory and intermediate logs per sample will be saved in the `.logs/` folder.
 
+To perform full evaluation within the docker container you can use the following command. Simply substitute the eval partition (_subject_) and the number of workers you prefer.
+
+```bash
+  docker run -d --rm \
+    --name cad-eval-3d \
+    -v $(pwd):/app \
+    -w /app \
+    -e DISPLAY=:99 \
+    cad-assistant \
+    bash -c "python run_cad_evaluation.py --subject 3D --parallel --workers 4 --output cad_evaluation_results_3d.json"
+```
+
+
 ## 🔧 CAD-Specific Tools
 
-### The `sketch_recognizer` tool
+### • The `sketch_recognizer` tool
 
 Current release includes the 2D CAD sketch renderering tool `sketch_recognizer`. The code implementation of the `sketch_recognizer` is adapted from [Vitruvion](https://github.com/PrincetonLIPS/vitruvion/tree/main/sketchgraphs).
 
 *Is Construction Flag*: The sketch rendering function loads construction information from `2D_****_isconstruction.json` since FreeCAD doesn't support an _is construction flag_ stored in the `.FCStd` file format.
 
+### • The `solid_recognizer` tool
 
-### Extending CAD-Assistant with New Tools and FreeCAD Commands
+Current release also includes the 3D CAD solid renderering tool `solid_recognizer`. The code implementation of the `solid_recognizer` is using Python OCC.
+
+
+
+## Extending CAD-Assistant with New Tools and FreeCAD Commands
 
 The CAD-Assistant framework is easily extendable with new tools and FreeCAD functions.
 
@@ -100,9 +119,8 @@ If you find this work useful for your research, please cite our paper:
 @article{Mallis2024CADAssistantTV,
         title={CAD-Assistant: Tool-Augmented VLLMs as Generic CAD Task Solvers},
         author={Dimitrios Mallis and Ahmet Serdar Karadeniz and Sebastian Cavada and Danila Rukhovich and Niki Maria Foteinopoulou and Kseniya Cherenkova and Anis Kacem and Djamila Aouada},
-        journal={ArXiv},
-        year={2024},
-        volume={abs/2412.13810},
+        journal={International Conference on Computer Vision (ICCV)},
+        year={2025},
       }
 ```
 

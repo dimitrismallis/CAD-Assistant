@@ -62,13 +62,19 @@ def solid_recognizer(doc: App.Document, logdir: str = None, step: int = None) ->
     step_filename = os.path.join(logdir, f"solid_step_{step}.stp")
 
     try:
-        part = [f for f in doc.Objects if f.Module=='Part'][0]
+        # all freecad models have been created such as After all operations, the final combined result is stored as a visible Part::Feature
+        part = [doc.Objects[-1]]
         
-        Part.export([part],step_filename)
+        Part.export(part,step_filename)
     except:
         print("Solid was not detected.")
 
-    subprocess.run(["xvfb-run", '/opt/conda/envs/occenv/bin/python', "cad_assistant/cad_tools/solid_recognizer_occ.py",step_filename])
+    # Use conda run to automatically use the correct Python from occenv environment
+    # Use --auto-servernum to avoid display conflicts in parallel execution
+    # Set XDG_RUNTIME_DIR to suppress Qt warnings
+    env = os.environ.copy()
+    env['XDG_RUNTIME_DIR'] = '/tmp/runtime-root'
+    subprocess.run(["xvfb-run", "--auto-servernum", "conda", "run", "-n", "occenv", "python", "cad_assistant/cad_tools/solid_recognizer_occ.py", step_filename], env=env)
     if not os.path.exists(img_filename):
         print("Solid rendering could not be generated.")
 

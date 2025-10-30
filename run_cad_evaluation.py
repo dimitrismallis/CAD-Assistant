@@ -17,8 +17,8 @@ def main():
     parser = argparse.ArgumentParser(description="Run CAD evaluation on SGP-bench CAD split (supports 2D and 3D)")
     
     # Basic options
-    parser.add_argument('--limit', type=int, default=5, 
-                       help='Number of samples to evaluate (default: 5 for quick test)')
+    parser.add_argument('--limit', type=int, default=None, 
+                       help='Number of samples to evaluate (default: all samples in partition)')
     parser.add_argument('--subject', type=str, default='2D', choices=['2D', '3D', 'both'],
                        help='Subject type to evaluate: 2D, 3D, or both (default: 2D)')
     parser.add_argument('--parallel', action='store_true',
